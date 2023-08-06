@@ -28,7 +28,7 @@
 ## C++ 编码风格
 
 - [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines) ， 官方的C++指导手册，提供一些实践建议：“xxx，你最好这样用”   ；参考性中等，不是所有建议都值得采纳，选出几个条加入自己的项目就够了 ，例如 Prefer enumerations over macros；Prefer `class enum MyEnum {}; `over  `enum MyEnum {};` 
-- [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)，谷歌官方的C++项目指导风格手册；写的超级规范；包含了为什么不用exception；为什么不用RTTI；不允许用 inline namespace(这个很容易把人搞晕)，但推荐使用unamed nampsace表示interal likepage；当然，并不是每一条都是金科玉律，比如必须用`#define` guards 保证头文件的唯一性；
+- [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)，谷歌官方的C++项目指导风格手册；写的超级规范；包含了为什么不用exception；为什么不用RTTI；不允许用 inline namespace(这个很容易把人搞晕)，但推荐使用unamed nampsace表示interal linkpage；当然，并不是每一条都是金科玉律，比如必须用`#define` guards 保证头文件的唯一性；
 - [OpenSSF Best Practices Badge](https://github.com/coreinfrastructure/best-practices-badge) ， 一个开源项目，用于评估其他开源项目是否符合FLOSS(Free/Libre and Open Source Software)标准。 但条件略苛刻，个人项目完全没必要通过FLOSS标准。但如果你想知道一个正经的开源项目，应该具备哪些要素，可通过查阅FLOSS标准了解到。FLOSS标准的部分要求：一个正经的开源项目，应当有一个稳定的主页，应当有How-to-install文档说明等 
 - [Clang-Format Style Options](https://clang.llvm.org/docs/ClangFormatStyleOptions.html) ， clang-format的官方文档，通过查阅此文档，编写自己的`.clang-format`文件，即可自定义项目的代码风格； 如果不想从零编写自己的`.clang-format`文件，可[basedonstyle](https://clang.llvm.org/docs/ClangFormatStyleOptions.html#basedonstyle)，或者把已有风格导出为文件，再二次编辑；如果想某些文件夹下的文件被formatted，某些不会，参考选项`DisableFormat: true`；如果想文件内某几行不被format，查看用法[Disabling Formatting on a Piece of Code](https://clang.llvm.org/docs/ClangFormatStyleOptions.html#disabling-formatting-on-a-piece-of-code)；如果项目中途引入或更换代码的格式化风格，但又怕污染git history，查看用法[` .git-blame-ignore-revs `](https://docs.github.com/en/repositories/working-with-files/using-files/viewing-a-file#ignore-commits-in-the-blame-view) 
 -  [Clang-Tidy Check Lists](https://clang.llvm.org/extra/clang-tidy/checks/list.html) ， 官方clang-tidy的检查表文档，通过查阅此文档，获取可支持的所有checks ， 如果觉得checks太多，了解不过来，建议拷贝知名Github开源项目的`.clang-tidy`文件，在其基础上二次编辑；如果你想手动地为某些特例关掉检查：[Suppressing Undesired Diagnostics](https://clang.llvm.org/extra/clang-tidy/#suppressing-undesired-diagnostics)；例如readability-identifier-naming中可以加入检查，要求所有的宏定义，必须是`UPPER_CASE`风格
@@ -149,7 +149,7 @@
 
 - [CppCon 2016: Jason Jurecka “Game engine using STD C++ 11"](https://www.youtube.com/watch?v=8AjRD6mU96s) ，12年+经验的某3A游戏工作室资深程序，介绍了为什么少用STL；如何最大化并行，如何资源编译期的版本控制等等
   
-- 虚幻引擎程序设计浅析[cloud]，2017年出版的纸质书，少有的讲源码的，讲了虚幻各个模块的代码设计，**进度在第4章**  
+- 虚幻引擎程序设计浅析[cloud]，2017年出版的纸质书，少有的讲源码的，讲了虚幻各个模块的代码设计，第4章ing  
   
 - [SMASH: a Distributed Game Engine Architecture](https://www.math.unipd.it/~cpalazzi/papers/Palazzi-engine-iscc16.pdf) ，2016发表的学术论文；给出了近些年这方面的论文研究，参考意义大；该文章的观点是现在的游戏引擎是一种建立于OS之上的library stacks，缺点是monolithic(global rebuild might become a significant bottleneck)，centralized(all software performing computational activity sits on the same machine) and difficult to scale upward，platform dependent(seamless deployment across multiple platforms is not always possible)；[SMASH设计示例图](https://raw.githubusercontent.com/NoSW/CloudImg/PicGo/img/202306260151549.png)；SMASH的思想是
   
