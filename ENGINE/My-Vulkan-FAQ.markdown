@@ -208,7 +208,7 @@ For GPU_ONLY: texture, buffer
 - elegant and extensible C API, `vkSomethingCreateInfo` -> `vkCreateSomething`-> `vkDestroySomething`, and extensible `pNext`
 - lots of underlying opt mind: pooling, type, type of type, type of "type of type", opt by leveraging pre-knowledge
 
-## My learning path
+## Learning path
 
 1. [homepage of vulkan](https://www.vulkan.org/), that's the coolest official website I have ever seen! If someone asks me: where to start learning vulkan, I will definitely say, read the official website first!
 2. [Understanding Vulkan Objects](https://gpuopen.com/learn/understanding-vulkan-objects/)，Introduce the concepts in the Vulkan API in plain words, with a diagram.

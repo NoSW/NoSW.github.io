@@ -68,17 +68,24 @@
 
 ## GLSL
 
-- [The std430 Layout Rules](https://www.oreilly.com/library/view/opengl-programming-guide/9780132748445/app09lev1sec3.html)
-- [The GL_ARB_enhanced_layouts](https://registry.khronos.org/OpenGL/extensions/ARB/ARB_enhanced_layouts.tx)
-- [The GL_EXT_scalar_block_layout](https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GL_EXT_scalar_block_layout.txt)
+- 关于GLSL的几种layout rule：（如果不注意，容易踩alignment&padding导致的坑）
+  - [The std430 Layout Rules](https://www.oreilly.com/library/view/opengl-programming-guide/9780132748445/app09lev1sec3.html)
+  - [The GL_ARB_enhanced_layouts](https://registry.khronos.org/OpenGL/extensions/ARB/ARB_enhanced_layouts.tx)
+  - [The GL_EXT_scalar_block_layout](https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GL_EXT_scalar_block_layout.txt)
+
 
 ## 渲染管线
 
-- [Forward vs Deferred vs Forward+ Rendering with DirectX 11](https://www.3dgep.com/forward-plus/) ， 2015年 ， 某大学的master毕业设计 ， 做了完整的实验，通过实验数据详尽的对比三种渲染管线，非得值得阅读 ， 结论是Forward:multi shading model+semi-transparent,or few dynamic lights；deferred：forward不合适的场景；Foward+：因为做光源剔除需要额外的内存；Clusterred Deferred：ditto
+- [Forward vs Deferred vs Forward+ Rendering with DirectX 11](https://www.3dgep.com/forward-plus/)， 2015年某大学的master毕业设计，做了完整的实验，通过实验数据详尽的对比传统方法的三种渲染管线，非得值得阅读， 结论是
+
+  - Forward:multi shading model+semi-transparent,or few dynamic lights，[Forward实验数据](https://raw.githubusercontent.com/NoSW/CloudImg/PicGo/img/202308061331621.png)
+  - Deferred（G-Buffer）：forward不合适的场景。[G-Buffer实验数据](https://raw.githubusercontent.com/NoSW/CloudImg/PicGo/img/202308061329203.png)
+  - Foward+：做光源剔除需要额外的内存，[Foward+ 实验数据](https://raw.githubusercontent.com/NoSW/CloudImg/PicGo/img/202308061328632.png)
+  - 总结下，Foward+ > deferred >> forward，可见光源剔除的重要性。[三种管线的对比数据](https://raw.githubusercontent.com/NoSW/CloudImg/PicGo/img/202308061332145.png)
 
 - [Deferred Rendering for Current and Future Rendering Pipelines](https://www.intel.com/content/dam/develop/external/us/en/documents/lauritzen-deferred-shading-siggraph-2010-181241.pdf)，SIGGRAPH 2010，探讨了forward，deferred，tile-baed deferred
 
-- [Clustered Deferred and Forward Shading](https://www.cse.chalmers.se/~uffe/clustered_shading_preprint.pdf)，HPG2012
+- [Clustered Deferred and Forward Shading](https://www.cse.chalmers.se/~uffe/clustered_shading_preprint.pdf)，HPG2012，光源剔除技术的一种变体
 
 - [Future Directions for Compute-for-Graphics](https://www.ea.com/seed/news/seed-siggraph2017-compute-for-graphics)，SIGGRAPH2017
 
@@ -96,7 +103,7 @@
 
 - [NANITE FOR EDUCATORS AND STUDENTS](https://cdn2.unrealengine.com/nanite-for-educators-and-students-2-b01ced77f058.pdf)，使用指导手册
 
-- [Geometry Processing: The Nanite System in Unreal Engine 5](https://www.medien.ifi.lmu.de/lehre/ws2122/gp/slides/gp-ws2122-extra-nanite.pdf)，其他解读版本
+- [Geometry Processing: The Nanite System in Unreal Engine 5](https://www.medien.ifi.lmu.de/lehre/ws2122/gp/slides/gp-ws2122-extra-nanite.pdf)，其他解读版本，对Cluster Hierarchy，LOD，Group这几个相关联的概念解释的比较清楚。传统Mesh走传统G-Buffer，Nanite Mesh用CS走Culling和HW/SW，最后在GBuffer处汇合。[The Rendering Pipeline with Nanite](https://raw.githubusercontent.com/NoSW/CloudImg/PicGo/img/202308061357377.png)
 
   
 
@@ -119,7 +126,7 @@
 - [Geometric Derivation of the Irradiance of Polygonal Lights](https://hal.science/hal-01458129/document)，Unity技术人员于2017.02发布的一篇小论文，详细推导了如何计算Irradiance of Polygonal Lights（也就是半球面上三个点组成的区域的irradiance）；还配了图例，清晰易懂
 - [Real Shading in Unreal Engine 4](https://cdn2.unrealengine.com/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf)，UE Nanite作者 Brian Karis于2013年的文章，重点介绍PBR引入UE4的实践，顺带提到了基于Representative Point方法的Sphere，Tube这两种shape的实现；有公式方便抄；
 - [Physically Based Area Lights](https://gitea.yiem.net/QianMo/Real-Time-Rendering-4th-Bibliography-Collection/raw/branch/main/Chapter%201-24/[0380]%20[GPU%20Pro5%202014]%20Physically%20Based%20Area%20Lights.pdf)，Killzone: Shadow Fall游戏团队的Michal Drobo于2014年发表在GPU Pro5上的专题论文，介绍PlayStation4上的方案；从渲染方程的推导开始介绍，文字量相对较多；不同于Representative Point；该文计算diffuse lighting时选取most important point in terms of importance sampling. 选取方法是，1）找到n于light plane的交点p' 2）找到p在light plane上的投影点p’‘；3)求 h= normalized(pp' + pp‘’)，4）h与light plane的交点即为most important point
-- [Real-Time Polygonal-Light Shading with Linearly Transformed Cosines](https://eheitzresearch.wordpress.com/415-2/)；[[slides](https://drive.google.com/file/d/0BzvWIdpUpRx_Z2pZWWFtam5xTFE/view?resourcekey=0-K9rJBtyrgGtxfP3XHDUCyQ)] [[Github](https://github.com/selfshadow/ltc_code)] ， 2016     ， ACM SIGGRAPH 2016;Unity技术                           ， 学术论文     ， 事实上的标准方法，支持任意形状的多边形，例如五角星，支持texture lighting；在UE5中也被采纳 [[RectLight.ush](https://github.com/EpicGames/UnrealEngine/blob/463443057fb97f1af0d2951705324ce8818d2a55/Engine/Shaders/Private/RectLight.ush)] ， slides特意做了动画演示数学原理
+- [Real-Time Polygonal-Light Shading with Linearly Transformed Cosines](https://eheitzresearch.wordpress.com/415-2/)；[[slides](https://drive.google.com/file/d/0BzvWIdpUpRx_Z2pZWWFtam5xTFE/view?resourcekey=0-K9rJBtyrgGtxfP3XHDUCyQ)] [[Github](https://github.com/selfshadow/ltc_code)]，ACM SIGGRAPH 2016;Unity技术，目前的标准方法，支持任意形状的多边形，例如五角星，支持texture lighting；在UE5中也被采纳 [[RectLight.ush](https://github.com/EpicGames/UnrealEngine/blob/463443057fb97f1af0d2951705324ce8818d2a55/Engine/Shaders/Private/RectLight.ush)]；slides特意做了动画演示数学原理
 - [Area Light Sources in Cyberpunk 2077](https://history.siggraph.org/wp-content/uploads/2022/06/2021-Talks-Sikachev_Area-Light-Sources-in-Cyberpunk-2077.pdf)，2022年发表的简短小论文，依然基于Representative Point的方法，但通过weighted representative direction based on roughness 更好地达到 energy preservation
 
 ## TAA
@@ -143,15 +150,22 @@
   
 - 虚幻引擎程序设计浅析[cloud]，2017年出版的纸质书，少有的讲源码的，讲了虚幻各个模块的代码设计，**进度在第4章**  
   
-- [SMASH: a Distributed Game Engine Architecture](https://www.math.unipd.it/~cpalazzi/papers/Palazzi-engine-iscc16.pdf) ，2016
+- [SMASH: a Distributed Game Engine Architecture](https://www.math.unipd.it/~cpalazzi/papers/Palazzi-engine-iscc16.pdf) ，2016发表的学术论文；给出了近些年这方面的论文研究，参考意义大；该文章的观点是现在的游戏引擎是一种建立于OS之上的library stacks，缺点是monolithic(global rebuild might become a significant bottleneck)，centralized(all software performing computational activity sits on the same machine) and difficult to scale upward，platform dependent(seamless deployment across multiple platforms is not always possible)；[SMASH设计示例图](https://raw.githubusercontent.com/NoSW/CloudImg/PicGo/img/202306260151549.png)；SMASH的思想是
   
-- [A System for Interactive Indirect Illumination in the Cloud](https://research.nvidia.com/publication/2013-07_cloudlight-system-amortizing-indirect-lighting-real-time-rendering-technical)，NVIDIA 于2013的一个talk，思路是把indirect lighting 放在云上计算                    
+  > With SMASH, a game engine is decomposed in **several dynamic and independent software modules interacting with each other via a microkernel-like message bus**. This way, game modules can just be inserted, debugged, and removed from a running engine once its internal messaging protocol is clearly defined. Moreover, modules can also be dynamically dislocated on multiple machines in order to achieve a truly distributed, scalable, and fault-resilient system where adaptation can beachieved mostly without downtime.
+  >
+  > This kind of approach sees a game engine much closer to a runtime environment (see, e.g., Java and CLI) rather than a library stack. A SMASH engine is basically an execution environment providing three basic functionalities: (*i*) a soft real-time scheduler, (*ii*) a dynamic game modules manager, and (*iii*) a messaging system between modules.
+  
+  总结：一篇在网速延迟足够低，带宽足够大下的假设下的，以引擎架构的设计思路，实际操作性小；作者最后给出了一个简单的原型(用户交互机-物理模拟机-3D渲染机)Demo；
+  
+  - [A System for Interactive Indirect Illumination in the Cloud](https://research.nvidia.com/publication/2013-07_cloudlight-system-amortizing-indirect-lighting-real-time-rendering-technical)，NVIDIA 于2013的一个talk，只从渲染角度探讨了从User Input ->Simulation->Surface->G-Buffer->Direct LIght->Indirect Light->Composite->Post Process->UI->Final Frame整个流程中，哪部分能搬到云服务器上，最后实现的思路是把View-Independent Indirect lighting 放在云上计算
+  
 
 # 五、其他
 
 ## 排版工具
 
-- [Markdeep](https://casual-effects.com/markdeep/)，给markdown文件头或尾加入一行html代码，使用浏览器渲染修改后的文件时，即可获得这种效果：[一个采用的markdeep的技术文档](https://google.github.io/filament/Filament.htmll)，[各种排版效果展示](https://casual-effects.com/markdeep/features.md.html)， 对懒得折腾各种排版软件、排版环境的人友好，只用写md，写完插入一行代码就可以获得还不错的排版效果
-- [Overleaf](https://www.overleaf.com/latex/templates)， 在线Latex模板网站，免费无广告，免去本地latex的环境搭建之苦；登录账号，还有云存储的功能；修改、储存简历好用                                       
-- [Typst](https://typst.app/)，[[github](https://github.com/typst/typst)] ， 23年刚推出的，用Rust写的开源排版工具；编程的方式写文档，比Latex语法简单，但排版能力号称不输Latex；重点是可多人实时协同编辑；目标客户看起来像是经常需要写论文科研人员 ， 目前模板库不多，只有五六个，且都是学术论文模板，其他选择较少
+- [Markdeep](https://casual-effects.com/markdeep/)，给markdown文件头或尾加入一行html代码，使用浏览器渲染修改后的文件时，即可获得这种效果：[一个采用的markdeep的技术文档](https://google.github.io/filament/Filament.htmll)，[各种排版效果展示](https://casual-effects.com/markdeep/features.md.html)，对懒得折腾各种排版软件、排版环境的人友好，只用写md，写完插入一行代码就可以获得还不错的排版效果
+- [Overleaf](https://www.overleaf.com/latex/templates)，在线Latex模板网站，免费无广告，免去本地latex的环境搭建之苦；登录账号，还有云存储的功能；修改、储存简历好用                                       
+- [Typst](https://typst.app/)，[[github](https://github.com/typst/typst)]，23年刚推出的，用Rust写的开源排版工具；编程的方式写文档，比Latex语法简单，但排版能力号称不输Latex；重点是可多人实时协同编辑；目标客户看起来像是经常需要写论文科研人员， 目前模板库不多，只有五六个，且都是学术论文模板，其他选择较少
 
